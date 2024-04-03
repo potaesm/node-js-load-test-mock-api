@@ -5,7 +5,7 @@ const InternalServerError = require('http-errors')(500);
 
 const redisURL = 'redis://default:redispass@localhost:6379';
 
-const EXPIRY_TIME_SEC = 120;
+const EXPIRY_TIME_SEC = 10;
 
 async function getClient(url = '') {
 	try {
@@ -61,11 +61,12 @@ async function deleteValues(client = createClient(), pattern = '') {
 
 	app.post('/set', async (req, res) => {
 		try {
-			const { body = { message: 'Hello World!' } } = req.body;
+			const startTimestamp = Date.now();
+			const body = req.body || { message: 'Hello World!' };
 			const entries = Object.entries(body);
 			const resultPromiseList = [];
 			for (const [key, value] of entries) {
-				resultPromiseList.push(setKeyValue(client, key, EXPIRY_TIME_SEC, value));
+				resultPromiseList.push(setKeyValue(client, key, EXPIRY_TIME_SEC, JSON.stringify({ value, durationMs: Date.now() - startTimestamp })));
 			}
 			const results = await Promise.all(resultPromiseList);
 			return res.send(results || []);
