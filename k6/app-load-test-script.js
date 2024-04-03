@@ -135,9 +135,9 @@ export function saveDataSceneHandler() {
 			hasStored: false
 		}
 	};
-	group('Save data scene', (_) => {
+	group('save_data_scene', (_) => {
 		if (evaluations.errors.length === 0) {
-			group('Store data', (_) => {
+			group('store_data_step', (_) => {
 				const randomValue = uuidv4(true);
 				const startTimestamp = Date.now();
 				storeDataRequestCounter.add(1, {
@@ -188,7 +188,7 @@ export function saveDataSceneHandler() {
 						name: 'failed_store_data_request'
 					});
 				} else {
-					group('Verify data', (_) => {
+					group('verify_data_step', (_) => {
 						sleep(APP_INTERNAL_DELAY_SEC);
 						try {
 							redisClient.get(`app_${randomValue}`).then((data) => {
