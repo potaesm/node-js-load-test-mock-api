@@ -10,3 +10,10 @@ go install go.k6.io/xk6/cmd/xk6@latest
 # Build xk6-redis binary:
 xk6 build --with github.com/grafana/xk6-redis
 ```
+
+# Run
+
+```bash
+export K6_OUT=influxdb=http://localhost:8086/k6
+./k6 run xxx.js
+```
